@@ -14,6 +14,7 @@ from ..engines.planner import PlannerEngine
 from ..engines.executor import ExecutorEngine, event_dispatcher
 from ..engines.memory import memory_engine
 from ..engines.context import ContextEngine
+from ..engines.consensus import consensus_engine
 from ..plugins.manager import plugin_manager
 
 router = APIRouter()
@@ -25,6 +26,15 @@ context_engine = ContextEngine()
 # Pydantic Schemas
 class PromptRequest(BaseModel):
     prompt: str
+
+class ConsensusRequest(BaseModel):
+    plan: List[Dict[str, Any]]
+
+class PluginExecuteRequest(BaseModel):
+    plugin: str
+    action: str
+    inputs: Dict[str, Any] = {}
+
 
 class ExecuteRequest(BaseModel):
     workspace_id: str
@@ -327,3 +337,20 @@ def toggle_automation(rule_id: str, db: Session = Depends(get_db)):
 def list_logs(db: Session = Depends(get_db)):
     logs = db.query(AuditLog).order_by(AuditLog.timestamp.desc()).limit(100).all()
     return logs
+
+
+# CONSENSUS ENGINE
+@router.post("/consensus/evaluate")
+def evaluate_consensus(req: ConsensusRequest):
+    return consensus_engine.evaluate_plan(req.plan)
+
+
+# DIRECT PLUGIN EXECUTION
+@router.post("/plugins/execute")
+def execute_plugin_action(req: PluginExecuteRequest):
+    try:
+        res = plugin_manager.execute(req.plugin, req.action, req.inputs)
+        return {"status": "success", "result": res}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
