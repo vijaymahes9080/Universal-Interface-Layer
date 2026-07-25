@@ -85,6 +85,56 @@ class PluginManager:
             }
         }
 
+        # Register GitHub DevOps Plugin metadata
+        self.plugins["github"] = {
+            "name": "GitHub DevOps Integrator",
+            "description": "Fetches repositories, issues, and commit details.",
+            "manifest": {
+                "commands": {
+                    "get_repo_info": {"inputs": ["repo"], "outputs": ["name", "stars", "forks", "open_issues"]},
+                    "list_issues": {"inputs": ["repo"], "outputs": ["issues"]},
+                    "search_commits": {"inputs": ["query"], "outputs": ["results"]}
+                }
+            }
+        }
+
+        # Register SQL Analytics Plugin metadata
+        self.plugins["sql_analytics"] = {
+            "name": "SQL Analytics & Database Engine",
+            "description": "Runs read-only SQL queries and reflects SQLite schemas.",
+            "manifest": {
+                "commands": {
+                    "query_database": {"inputs": ["query", "db_name"], "outputs": ["columns", "rows", "row_count"]},
+                    "describe_schema": {"inputs": ["db_name"], "outputs": ["database", "tables", "schema"]}
+                }
+            }
+        }
+
+        # Register Web Intelligence Plugin metadata
+        self.plugins["web_intelligence"] = {
+            "name": "Web Intelligence & Extractor",
+            "description": "Fetches web URLs and converts HTML content into Markdown text.",
+            "manifest": {
+                "commands": {
+                    "fetch_url": {"inputs": ["url"], "outputs": ["status_code", "snippet"]},
+                    "extract_text": {"inputs": ["html"], "outputs": ["text", "word_count"]}
+                }
+            }
+        }
+
+        # Register System Telemetry Monitor Plugin metadata
+        self.plugins["sys_monitor"] = {
+            "name": "System Telemetry & Performance Monitor",
+            "description": "Monitors CPU, Memory, Disk usage, and process statistics.",
+            "manifest": {
+                "commands": {
+                    "get_system_stats": {"inputs": [], "outputs": ["cpu_percent", "memory_percent", "disk_percent"]},
+                    "list_processes": {"inputs": [], "outputs": ["top_processes", "total_active_processes"]}
+                }
+            }
+        }
+
+
     def execute(self, plugin_name: str, action: str, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Executes a plugin command by finding the appropriate handler and executing it.
