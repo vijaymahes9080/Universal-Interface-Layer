@@ -1,0 +1,16 @@
+{
+  "name": "@uil/sdk",
+  "version": "1.0.0",
+  "description": "Universal Interface Layer (UIL) TypeScript SDK for building sandboxed plugins",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "author": "Vijay Mahes <Vijaypradhap2004@gmail.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
