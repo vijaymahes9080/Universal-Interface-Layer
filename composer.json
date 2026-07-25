@@ -1,0 +1,12 @@
+{
+    "name": "vijaymahes9080/universal-interface-layer",
+    "description": "Universal Interface Layer",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Vijay Mahes",
+            "email": "Vijaypradhap2004@gmail.com"
+        }
+    ],
+    "require": {}
+}
