@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Sparkles, Terminal, ChevronRight, Zap, Loader2, X, Compass, ArrowRight } from 'lucide-react'
+import { Search, Sparkles, Terminal, ChevronRight, Zap, Loader2, X, Compass, ArrowRight, Mic, MicOff } from 'lucide-react'
 import { useUILStore } from '../store/store'
 
 interface CommandBarProps {
@@ -19,15 +19,42 @@ const SUGGESTIONS = [
 export default function CommandBar({ isOpen, onClose, onSelectWorkspace }: CommandBarProps) {
   const [prompt, setPrompt] = useState('')
   const [isPlanning, setIsPlanning] = useState(false)
+  const [isListening, setIsListening] = useState(false)
   const [generatedPlan, setGeneratedPlan] = useState<any | null>(null)
   
   const { submitPrompt, executeWorkspace } = useUILStore()
+
+  const handleVoiceToggle = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Speech Recognition is not supported in this browser.')
+      return
+    }
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'en-US'
+    recognition.interimResults = false
+
+    if (!isListening) {
+      setIsListening(true)
+      recognition.start()
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript
+        setPrompt(transcript)
+        setIsListening(false)
+      }
+      recognition.onerror = () => setIsListening(false)
+      recognition.onend = () => setIsListening(false)
+    } else {
+      setIsListening(false)
+    }
+  }
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!prompt.trim()) return
     await startPlanning(prompt)
   }
+
 
   const startPlanning = async (text: string) => {
     setIsPlanning(true)
@@ -87,10 +114,22 @@ export default function CommandBar({ isOpen, onClose, onSelectWorkspace }: Comma
                 type="text"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="What objective would you like UIL to coordinate?"
+                placeholder={isListening ? "Listening for voice command..." : "What objective would you like UIL to coordinate?"}
                 className="flex-1 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none"
                 disabled={isPlanning}
               />
+              <button
+                type="button"
+                onClick={handleVoiceToggle}
+                className={`p-2 rounded-lg transition ${
+                  isListening
+                    ? 'bg-rose-500/20 text-rose-400 animate-pulse'
+                    : 'text-gray-400 hover:text-cyan-400 hover:bg-gray-800'
+                }`}
+                title="Toggle Voice Command HUD"
+              >
+                {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+              </button>
               {isPlanning && <Loader2 className="text-indigo-400 animate-spin shrink-0" size={18} />}
               <button 
                 type="button" 
@@ -100,6 +139,7 @@ export default function CommandBar({ isOpen, onClose, onSelectWorkspace }: Comma
                 <X size={16} />
               </button>
             </form>
+
 
             <div className="flex-1 max-h-[380px] overflow-y-auto p-4 scrollbar-thin">
               

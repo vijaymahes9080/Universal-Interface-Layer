@@ -28,6 +28,7 @@ import KnowledgeGraphPage from './pages/KnowledgeGraphPage'
 import PluginsPage from './pages/PluginsPage'
 import DeveloperPage from './pages/DeveloperPage'
 import Settings from './pages/Settings'
+import { WorkflowBuilder } from './pages/WorkflowBuilder'
 
 export default function App() {
   const { 
@@ -43,7 +44,8 @@ export default function App() {
     deleteWorkspace
   } = useUILStore()
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'workspace' | 'automation' | 'graph' | 'plugins' | 'developer' | 'settings'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'workspace' | 'automation' | 'graph' | 'plugins' | 'developer' | 'settings' | 'workflow-studio'>('dashboard')
+
 
   useEffect(() => {
     // 1. Initial pulls
@@ -131,6 +133,19 @@ export default function App() {
               <Workflow size={18} />
               <span>Automations</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('workflow-studio')}
+              className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-150 ${
+                activeTab === 'workflow-studio'
+                  ? 'bg-cyan-600/10 text-cyan-400 border-l-2 border-cyan-500'
+                  : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
+              }`}
+            >
+              <Zap size={18} className="text-cyan-400" />
+              <span>Workflow Studio</span>
+            </button>
+
 
             <button
               onClick={() => setActiveTab('graph')}
@@ -257,11 +272,13 @@ export default function App() {
           {activeTab === 'dashboard' && <Dashboard onSelectWorkspace={selectWorkspace} />}
           {activeTab === 'workspace' && <WorkspaceDetail />}
           {activeTab === 'automation' && <Automation />}
+          {activeTab === 'workflow-studio' && <WorkflowBuilder />}
           {activeTab === 'graph' && <KnowledgeGraphPage />}
           {activeTab === 'plugins' && <PluginsPage />}
           {activeTab === 'developer' && <DeveloperPage />}
           {activeTab === 'settings' && <Settings />}
         </section>
+
       </main>
 
       {/* Floating Command Bar Portal */}
