@@ -6,18 +6,31 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
+*.egg-info/
+.eggs/
 .env
 venv/
 .venv/
+env/
 
-# Node / JS
+# Node / JavaScript / TypeScript
 node_modules/
 dist/
 build/
 .cache/
+.npm
+*.tsbuildinfo
 
-# IDE / OS
+# Databases & Workspace Outputs
+*.db
+*.sqlite
+*.sqlite3
+workspaces/*/
+
+# IDE & OS
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+*.swp
+*.log

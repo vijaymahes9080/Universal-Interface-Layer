@@ -1,58 +1,94 @@
-# Universal Interface Layer (UIL)
+# Universal Interface Layer (UIL) 🌌
 
-Universal Interface Layer (UIL) is a startup-grade, production-ready AI operating interface designed to unify all your workflows. It converts natural language commands into coordinated, topological execution graphs across multiple applications via sandboxed plugin agents.
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2%2B-blue)](https://www.typescriptlang.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-emerald)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18%2B-cyan)](https://react.dev/)
 
-```
-       [ User Natural Language Prompt ]
-                      │
-                      ▼
-               [ Intent Engine ]
-                      │
-                      ▼
-             [ Planner DAG Engine ]
-                      │
-                      ▼
-             [ Executor Engine ] ── websocket telemetry ──► [ React Flow Dashboard ]
-                      │
-           ┌──────────┼──────────┐
-           ▼          ▼          ▼
-       [Files]   [Calendar]  [Terminal] ... (Zero-Trust Sandbox Isolation)
-```
-
-## Core Modules
-
-1. **Intent Parsing & Heuristics**: Converts raw tasks into structured command targets. Supports deterministic rule maps for offline efficiency and falls back to LiteLLM/Ollama.
-2. **Topological DAG Planner**: Sorts steps by dependency, verifying cycles using DFS algorithms to prevent endless locks.
-3. **Safety Execution & WebSocket logs**: Handles concurrency, timeouts, and state updates, halting on high-risk operations (e.g. sending emails, running system commands) for human authorization.
-4. **Sandboxed Plugin SDK**: Enforces path isolation, whitelist command policies, and permission control gates.
-5. **Dynamic Knowledge Graph**: Registers task executions, created documents, contacts, and concepts, rendering nodes in an interactive SVG canvas.
-6. **Vector Cosine Memory**: Recalls past sessions, deadlines, and guidelines using a lightweight TF-IDF matching engine built in pure Python.
+**Universal Interface Layer (UIL)** is a production-ready AI operating interface designed to unify complex developer and workplace workflows. It converts natural language commands (or voice prompts) into topological, sandboxed execution graphs (DAGs) across local and cloud applications via isolated plugin agents.
 
 ---
 
-## Directory Structure
+## 🏛 Architecture Overview
 
+```text
+               ┌──────────────────────────────────────────────┐
+               │    User Natural Language / Voice Prompt      │
+               └──────────────────────┬───────────────────────┘
+                                      │
+                                      ▼
+                           ┌─────────────────────┐
+                           │    Intent Engine    │
+                           └──────────┬──────────┘
+                                      │
+                                      ▼
+                           ┌─────────────────────┐
+                           │ Planner DAG Engine  │
+                           └──────────┬──────────┘
+                                      │
+                                      ▼
+                       ┌─────────────────────────────┐
+                       │ Multi-Agent Consensus Engine│
+                       │   (Security & Risk Gate)    │
+                       └──────────────┬──────────────┘
+                                      │
+                                      ▼
+    ┌─────────────────────────────────┴─────────────────────────────────┐
+    │                         Executor Engine                           │
+    │         (WebSocket Telemetry Stream ──► React Flow Dashboard)      │
+    └──────┬────────────┬─────────────┬─────────────┬─────────────┬─────┘
+           │            │             │             │             │
+           ▼            ▼             ▼             ▼             ▼
+      [GitHub]    [SQL Analytics]   [Web Intel]   [System Mon]   [Sandbox]
 ```
-uil-monorepo/
+
+---
+
+## 🔥 Key Features & Innovations
+
+- 🧠 **Intent Parsing & Dynamic DAG Planner**: Generates cycle-free Directed Acyclic Graphs (DAGs) using DFS algorithms.
+- 🛡 **Multi-Agent Consensus & Security Audit Engine**: Evaluates execution safety, preventing privilege escalations, unauthorized destructive scripts, and unsafe parameters.
+- 🧩 **Extensible 10+ Core Plugin Suite**:
+  - 🐱 **GitHub DevOps**: Search commits, track open issues, inspect repo health.
+  - 📊 **SQL Analytics**: Execute read-only SQL queries and reflect SQLite schemas.
+  - 🌐 **Web Intelligence**: Scrape web pages and extract clean Markdown summaries.
+  - 💻 **System Telemetry**: Real-time CPU, RAM, Disk, and process monitoring.
+  - 📁 **Files & Terminal**: Zero-trust path isolation and command whitelist enforcement.
+  - 📅 **Calendar, Email & Tasks**: Automated scheduling, draft notifications, and task management.
+- ⚡ **Multi-Language SDK Support**: Build sandboxed plugins using **Python** (`uil_sdk`) or **TypeScript** (`@uil/sdk`).
+- 🎨 **Visual Workflow Studio & Speech HUD**: Interactive drag-and-drop workflow canvas and Web Speech API integration in the React Dashboard.
+- 🚀 **Automated CI/CD**: Complete Pytest test suite and GitHub Actions workflow.
+
+---
+
+## 📁 Repository Structure
+
+```text
+Universal-Interface-Layer/
+├── .github/
+│   └── workflows/          # GitHub Actions CI/CD pipelines
 ├── apps/
-│   ├── backend/            # FastAPI, SQLite models, agent planners, executor loop
-│   └── frontend/           # React client with custom graph explorer & React Flow builder
+│   ├── backend/            # FastAPI core server, engines (DAG, Consensus), plugins
+│   └── frontend/           # React 18 client, Visual Workflow Studio, Command Bar HUD
 ├── sdk/
-│   └── python/             # UILPlugin class and decorator-based command compilers
+│   ├── python/             # Python UILPlugin SDK
+│   └── typescript/         # TypeScript / Node.js @uil/sdk
 ├── scripts/
-│   ├── setup.ps1           # Automated dependency installer for Windows PowerShell
-│   └── setup.sh            # Automated dependency installer for macOS/Linux Bash
-├── docs/                   # Software specifications, designs, APIs, developer logs
-├── tests/                  # Pytest unit tests for parser, planners, and sandbox blocks
+│   ├── setup.ps1           # Automated installer for Windows PowerShell
+│   └── setup.sh            # Automated installer for macOS/Linux Bash
+├── docs/                   # System Design, SRS, API docs & plugin guides
+├── tests/                  # Pytest test suite (engines, plugins, sandboxes)
+├── composer.json           # Composer manifest with developer metadata
+├── LICENSE                 # Apache 2.0 License
 └── README.md
 ```
 
 ---
 
-## Quickstart
+## ⚡ Quickstart
 
-### Automated Setup
-To configure the workspace virtual environment and frontend node packages, run the automated setup script for your platform:
+### Automated Environment Setup
 
 **Windows PowerShell:**
 ```powershell
@@ -65,29 +101,29 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh
 ```
 
-### Manual Execution
+---
 
-#### 1. Backend Core Server:
+### Manual Server Execution
+
+#### 1. Backend Core Server
 ```bash
 cd apps/backend
-# Activate your virtual environment
 python -m apps.backend.main
 ```
-The server will run on `http://127.0.0.1:8000`.
+> Server will be running at `http://127.0.0.1:8000`.
 
-#### 2. Frontend React Client:
+#### 2. Frontend React Client
 ```bash
 cd apps/frontend
 npm run dev
 ```
-The dashboard UI will load on `http://localhost:3000`.
+> Client UI will load on `http://localhost:3000`.
 
 ---
 
-## SDK Integration
+## 🛠 SDK Integrations
 
-Writing custom plugins is simple with the UIL Python SDK:
-
+### Python SDK (`uil_sdk`)
 ```python
 from uil_sdk import UILPlugin
 
@@ -101,14 +137,42 @@ if __name__ == "__main__":
     plugin.write_manifest_file("manifest.json")
 ```
 
+### TypeScript SDK (`@uil/sdk`)
+```typescript
+import { UILPlugin } from '@uil/sdk';
+
+const plugin = new UILPlugin('NodeService', 'Custom Node plugin');
+
+plugin.registerCommand(
+  'fetch_status',
+  'Fetches service uptime',
+  ['url'],
+  ['status'],
+  async (inputs) => ({ status: 'healthy' })
+);
+
+plugin.writeManifestFile('manifest.json');
+```
+
 ---
 
-## Testing
+## 🧪 Testing
 
-Run unit tests verifying the DAG scheduler and path sandbox blockages:
+Run unit tests verifying DAG planners, multi-agent consensus, and sandboxed plugins:
 ```bash
 python -m pytest tests/
 ```
 
-## License
-Apache 2.0 License.
+---
+
+## 👤 Developer & Maintainer
+
+**Vijay Mahes**
+- **Email**: [Vijaypradhap2004@gmail.com](mailto:Vijaypradhap2004@gmail.com)
+- **GitHub**: [@vijaymahes9080](https://github.com/vijaymahes9080)
+
+---
+
+## 📄 License
+
+Licensed under the **Apache 2.0 License**. See [LICENSE](LICENSE) for details.
