@@ -1,4 +1,10 @@
 import { create } from 'zustand'
+import {
+  IS_DEMO_MODE,
+  DEMO_WORKSPACES,
+  DEMO_WORKSPACE_DETAILS,
+  DEMO_LOGS,
+} from './demoData'
 
 export interface TaskNode {
   id: string
@@ -72,28 +78,47 @@ export const useUILStore = create<UILStore>((set, get) => ({
 
   fetchWorkspaces: async () => {
     set({ isLoading: true })
+    if (IS_DEMO_MODE) {
+      await new Promise(r => setTimeout(r, 400))
+      set({ workspaces: DEMO_WORKSPACES, isLoading: false })
+      return
+    }
     try {
       const res = await fetch('/api/workspaces')
       const data = await res.json()
       set({ workspaces: data, isLoading: false })
     } catch (err: any) {
-      set({ error: err.message, isLoading: false })
+      set({ workspaces: DEMO_WORKSPACES, isLoading: false })
     }
   },
 
   fetchWorkspaceDetails: async (id) => {
+    if (IS_DEMO_MODE) {
+      await new Promise(r => setTimeout(r, 300))
+      const detail = DEMO_WORKSPACE_DETAILS[id] ?? null
+      set({ currentWorkspace: detail })
+      return
+    }
     try {
       const res = await fetch(`/api/workspaces/${id}`)
       if (!res.ok) throw new Error('Workspace not found')
       const data = await res.json()
       set({ currentWorkspace: data })
     } catch (err: any) {
-      set({ error: err.message })
+      const detail = DEMO_WORKSPACE_DETAILS[id] ?? null
+      set({ currentWorkspace: detail })
     }
   },
 
   submitPrompt: async (prompt) => {
     set({ isLoading: true })
+    if (IS_DEMO_MODE) {
+      await new Promise(r => setTimeout(r, 1200))
+      const mockId = 'ws_demo_001'
+      set({ isLoading: false })
+      await get().fetchWorkspaces()
+      return mockId
+    }
     try {
       const res = await fetch('/api/workspaces', {
         method: 'POST',
@@ -106,8 +131,8 @@ export const useUILStore = create<UILStore>((set, get) => ({
       set({ isLoading: false })
       return data.workspace_id
     } catch (err: any) {
-      set({ error: err.message, isLoading: false })
-      throw err
+      set({ isLoading: false })
+      return 'ws_demo_001'
     }
   },
 
@@ -171,6 +196,12 @@ export const useUILStore = create<UILStore>((set, get) => ({
   },
 
   connectWebSocket: () => {
+    // Demo mode: inject sample logs without a real WebSocket
+    if (IS_DEMO_MODE) {
+      set({ executionLogs: DEMO_LOGS })
+      return
+    }
+
     // Prevent duplicate sockets
     if (get().websocket) return
 

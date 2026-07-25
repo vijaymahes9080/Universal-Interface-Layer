@@ -12,8 +12,12 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18%2B-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](.github/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-GitHub_Pages-22c55e)](https://vijaymahes9080.github.io/Universal-Interface-Layer/)
 
 *Convert natural language & voice commands into sandboxed, topological execution graphs across local and cloud applications.*
+
+🔗 **[▶ View Live Demo →](https://vijaymahes9080.github.io/Universal-Interface-Layer/)**
+
 
 </div>
 

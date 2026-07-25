@@ -20,6 +20,7 @@ import {
   FolderSync
 } from 'lucide-react'
 import { useUILStore } from './store/store'
+import { IS_DEMO_MODE } from './store/demoData'
 import CommandBar from './components/CommandBar'
 import Dashboard from './pages/Dashboard'
 import WorkspaceDetail from './pages/WorkspaceDetail'
@@ -76,7 +77,27 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen flex bg-cyber-bg text-gray-100 overflow-hidden select-none">
+    <div className="h-screen w-screen flex flex-col bg-cyber-bg text-gray-100 overflow-hidden select-none">
+
+      {/* Demo Mode Banner */}
+      {IS_DEMO_MODE && (
+        <div className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 text-white text-xs font-semibold text-center py-1.5 px-4 flex items-center justify-center gap-3 shrink-0">
+          <Zap size={12} className="text-yellow-300 animate-pulse" />
+          <span>🚀 Live Demo Mode — Powered by UIL Static Preview. No backend required.</span>
+          <a
+            href="https://github.com/vijaymahes9080/Universal-Interface-Layer"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-yellow-300 transition"
+          >
+            ⭐ Star on GitHub
+          </a>
+          <Zap size={12} className="text-yellow-300 animate-pulse" />
+        </div>
+      )}
+
+      <div className="flex flex-1 overflow-hidden">
+
       
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-gray-950 border-r border-cyber-border flex flex-col justify-between shrink-0">
@@ -288,6 +309,8 @@ export default function App() {
         onSelectWorkspace={selectWorkspace} 
       />
 
+      </div> {/* end inner flex wrapper */}
     </div>
   )
 }
+
