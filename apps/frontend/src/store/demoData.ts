@@ -1,13 +1,15 @@
 /**
  * Demo mode: serves realistic mock data when the UIL backend is unreachable.
- * Activated when VITE_DEMO_MODE=true or when the API returns a network error.
+ * Activated automatically in production (GitHub Pages) builds.
  */
 
 import type { WorkspaceSummary, WorkspaceDetail, ExecutionLog } from './store'
 
-export const IS_DEMO_MODE =
-  import.meta.env.VITE_DEMO_MODE === 'true' ||
-  import.meta.env.MODE === 'production'
+// Vite replaces import.meta.env at build time; safe in both dev and prod
+const env = (import.meta as any).env ?? {}
+export const IS_DEMO_MODE: boolean =
+  env.VITE_DEMO_MODE === 'true' || env.MODE === 'production'
+
 
 export const DEMO_WORKSPACES: WorkspaceSummary[] = [
   {

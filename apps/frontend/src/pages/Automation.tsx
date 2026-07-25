@@ -54,9 +54,18 @@ export default function Automation() {
   const [triggerType, setTriggerType] = useState('schedule')
 
   const onConnect = useCallback(
-    (params: Connection | Edge) => setEdges((eds) => addEdge({ ...params, style: { stroke: '#6366F1' } }, eds)),
-    [setEdges]
+    (params: Connection | Edge) => {
+      // Extract connection-compatible fields only, add style separately
+      const edge = addEdge(params as Connection, edges)
+      setEdges(edge.map(e => e.id === (params as any).id || (!e.style)
+        ? { ...e, style: { stroke: '#6366F1' } }
+        : e
+      ) as any)
+    },
+    [edges, setEdges]
   )
+
+
 
   const handleSaveWorkflow = async () => {
     try {
